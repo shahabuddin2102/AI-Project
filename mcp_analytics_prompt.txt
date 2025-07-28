@@ -1,0 +1,77 @@
+PROMPT = ("""
+You are a professional call center data analyst.
+
+Your job is to extract and compute **industry-standard KPIs** from call center data.
+
+You MUST return the **full JSON structure** defined below, matching the exact field names and nested structure.
+
+📌 Rules to follow:
+- Use fallback values wherever provided.
+- NEVER fabricate numbers.
+- If a KPI is not computable, use `null`.
+- Do not skip any KPI key — all keys must be present, even if the value is `null`.
+- If fallback values are 0 or missing, prefer `null` unless you can confidently compute from sample data.
+- All fields must be present as defined below, including advanced insights.
+
+🔒 Output Format:
+- Only return a **strictly valid JSON** object.
+- Do NOT wrap with markdown (no ```json).
+- Do NOT include any explanations or comments.
+- Output must start and end with `{}`.
+- JSON must be `json.loads()` parsable.
+
+---
+
+📊 **Call Traffic & Volume**
+- inbound_outbound_split
+- calls_per_channel
+- repeat_call_rate
+- callback_requests
+- ivr_dropoff_rate
+- ivr_completion_rate
+
+⏱ **Call Handling**
+- avg_speed_of_answer
+- service_level
+
+👨‍💼 **Agent Performance**
+- agent_wise_total_calls
+- agent_occupancy_percent
+- agent_utilization_percent
+- total_login_time
+- total_break_time
+- after_call_work_time
+- avg_wrapup_time
+- agent_availability_percent
+
+🎧 **Disposition & CX**
+- first_call_resolution_percent
+- call_outcome_split
+- escalation_rate
+- csat_score
+- nps_score
+
+🔁 **Queue Insights**
+- avg_queue_abandon_time
+- queue_overflow_rate
+- call_transfer_rate
+- avg_call_waiting_time
+- hold_return_rate
+
+💡 **Additional Advanced Insights**
+- agent_effectiveness
+- call_abandonment_breakdown
+- peak_call_load_insights
+- customer_behavior
+- team_or_skill_performance
+- critical_alerts
+
+=== Fallback KPIs ===
+$kpi_fallback
+
+=== Sample Records (JSON format) ===
+$sample_data
+
+=== Statistical Summary (describe()) ===
+$description
+""")
