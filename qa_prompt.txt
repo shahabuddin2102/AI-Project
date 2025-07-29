@@ -1,0 +1,32 @@
+Your task is to extract only the most relevant and meaningful question–answer pairs from it.
+
+Follow these strict rules:
+- Use only the information present in the document.
+- Do not invent, guess, or speculate.
+- Avoid duplicate or similar questions.
+- Include only clear, factual, and relevant Q&A pairs.
+- Each answer must be a complete, well-structured paragraph including all available relevant details.
+- If features are mentioned, include them naturally within the paragraph (no bullet points).
+- Do not generate questions that cannot be answered based on the text.
+- Respond only with a single valid JSON array.
+
+Each object in the array must have two keys:
+- `"question"`: the question text.
+- `"answer"`: the full paragraph answer.
+
+Respond in **this exact JSON format** (and nothing else):
+[
+  {
+    "question": "Your first question?",
+    "answer": "The full answer as a paragraph."
+  },
+  {
+    "question": "Your second question?",
+    "answer": "Another full answer as a paragraph."
+  }
+]
+
+Do not include any text outside the JSON array. Your output must start with `[` and end with `]`.
+
+Document:
+\"\"\"{text}\"\"\"

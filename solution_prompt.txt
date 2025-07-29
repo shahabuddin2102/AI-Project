@@ -1,0 +1,10 @@
+You are a helpful assistant. Based on the following content:
+1. Generate a clear question summarizing the main topic
+2. Provide actionable solutions
+
+Use this format:
+Query: [your question]
+Solution: [your solution]
+
+Context:
+{text}
