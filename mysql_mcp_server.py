@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
 from contextlib import contextmanager
+from dotenv import load_dotenv
+from bs4 import BeautifulSoup
 import pymysql
 import httpx
 import os
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -33,7 +34,7 @@ app = FastAPI(title="Groq SQL MCP Server with MySQL", lifespan=lifespan)
 
 
 # === Groq LLM for Natural Language to SQL ===
-async def convert_prompt_to_sql(prompt: str) -> str:
+async def groq_call_sql(prompt: str) -> str:
     system_prompt = """You are an AI SQL assistant. Convert the user's natural language request into a SQL query.
 Only use the table `test` with columns `id`, `question`, `answer`. Do not add explanations."""
 
@@ -60,7 +61,7 @@ Only use the table `test` with columns `id`, `question`, `answer`. Do not add ex
 async def ask_faq_query(query: str) -> dict:
     """Converts user query to SQL using Groq, runs it on MySQL, and returns results."""
     try:
-        sql = await convert_prompt_to_sql(query)
+        sql = await groq_call_sql(query)
 
         with db_connection.cursor() as cursor:
             cursor.execute(sql)
@@ -74,17 +75,20 @@ async def ask_faq_query(query: str) -> dict:
     except Exception as e:
         return {"error": str(e)}
     
-print("MCP Tool mounted on /mcp")
-print("Registered tools:", mcp.tool)
 
 # === Mount MCP Server ===
 app.mount("/mcp", mcp.streamable_http_app())
 
 
-@app.post("/ask-faq")
+@app.post("/mysql_faq")
 async def ask_faq_endpoint(data: dict):
-    query = data.get("query")
-    return await ask_faq_query(query)
+    try:
+        query = data.get("query")
+        return await ask_faq_query(query)
+    
+    except Exception as e:
+        raise RuntimeError(f"data is not getting: {str(e)}")
+
 
 # === Run Uvicorn ===
 if __name__ == "__main__":
