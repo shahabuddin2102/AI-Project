@@ -1,8 +1,7 @@
-from fastapi import FastAPI
 from mcp.server.fastmcp import FastMCP
-from contextlib import contextmanager
 from dotenv import load_dotenv
-from bs4 import BeautifulSoup
+from contextlib import asynccontextmanager
+from fastapi import FastAPI
 import pymysql
 import httpx
 import os
@@ -13,8 +12,6 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 app = FastAPI(title="Groq SQL MCP Server with MySQL")
 mcp = FastMCP(name="GroqSQLTools")
-
-from contextlib import asynccontextmanager
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

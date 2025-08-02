@@ -2,10 +2,10 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from mcp.server.fastmcp import FastMCP
 from mcp.types import TextContent
+from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
-from groq import Groq
 import os
 import httpx
 import json
@@ -20,6 +20,7 @@ if not LANGSEARCH_API_KEY:
     raise ValueError("Lansearch api key is missing")
 
 mcp = FastMCP(name="LangSearchTools")
+app = FastAPI(title="LangSearch MCP Server")
 
 # === Tool Input Schema ===
 class LangSearchInput(BaseModel):
@@ -81,7 +82,6 @@ async def ask_from_website(query: str) -> dict:
         }]
 
 # === FastAPI App Mount ===
-app = FastAPI(title="LangSearch MCP Server")
 
 async def call_groq_llm(prompt: str) -> str:
     url = "https://api.groq.com/openai/v1/chat/completions"
@@ -117,9 +117,6 @@ async def call_groq_llm(prompt: str) -> str:
             return result["choices"][0]["message"]["content"]
     except httpx.ConnectTimeout:
         return "Error: Groq API timeout. Please try again later."
-
-
-from fastapi.responses import JSONResponse
 
 
 @app.post("/mcp/auto-answer")
